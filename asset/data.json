@@ -1,0 +1,49 @@
+{
+    "languages": [
+      {
+        "name": "Linux",
+        "id": 1
+      },
+      {
+        "name": "BASH",
+        "id": 2
+      },
+      {
+        "name": "PHP",
+        "id": 3
+      },
+      {
+        "name": "Docker",
+        "id": 4
+      },
+      {
+        "name": "HTML",
+        "id": 5
+      },
+      {
+        "name": "MySQL",
+        "id": 6
+      },
+      {
+        "name": "WordPress",
+        "id": 7
+      },
+      {
+        "name": "Laravel",
+        "id": 8
+      },
+      {
+        "name": "Kubernetes",
+        "id": 9
+      },
+      {
+        "name": "JavaScript",
+        "id": 10
+      },
+      {
+        "name": "DevOps",
+        "id": 11
+      }
+    ]
+  }
+  
