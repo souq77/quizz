@@ -13,10 +13,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Options" component={OptionsScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
-        <Stack.Screen options={{ headerShown: true }} name="Options" component={OptionsScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import data from '../asset/data.json';
 import Swiper from 'react-native-swiper/src';
 
@@ -49,19 +49,19 @@ const HomeScreen = () => {
             </View>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/bash.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/mysql.png')} />
               </View>
               <Text style={styles.iconsTitle}>MySQL</Text>
             </View>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/php.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/wordpress.png')} />
               </View>
               <Text style={styles.iconsTitle}>WordPress</Text>
             </View>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/docker.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/laravel.png')} />
               </View>
               <Text style={styles.iconsTitle}>Laravel</Text>
             </View>
@@ -69,19 +69,19 @@ const HomeScreen = () => {
           <View style={styles.parentGrid}>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/linux.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/kubernetes.png')} />
               </View>
               <Text style={styles.iconsTitle}>Kubernetes</Text>
             </View>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/bash.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/javascript.png')} />
               </View>
               <Text style={styles.iconsTitle}>JavaScript</Text>
             </View>
             <View style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
-                <Image style={styles.iconsImage} source={require('../asset/php.png')} />
+                <Image style={styles.iconsImage} source={require('../asset/devops.png')} />
               </View>
               <Text style={styles.iconsTitle}>DevOps</Text>
             </View>
