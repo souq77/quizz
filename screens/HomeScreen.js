@@ -18,25 +18,25 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <Swiper>
           <View style={styles.parentGrid}>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "linux"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/linux.png')} />
               </View>
               <Text style={styles.iconsTitle}>Linux</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "bash"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/bash.png')} />
               </View>
               <Text style={styles.iconsTitle}>BASH</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "php"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/php.png')} />
               </View>
               <Text style={styles.iconsTitle}>PHP</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "docker"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/docker.png')} />
               </View>
@@ -44,25 +44,25 @@ const HomeScreen = () => {
             </Pressable>
           </View>
           <View style={styles.parentGrid}>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "html"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/html.png')} />
               </View>
               <Text style={styles.iconsTitle}>HTML</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "mysql"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/mysql.png')} />
               </View>
               <Text style={styles.iconsTitle}>MySQL</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "wordpress"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/wordpress.png')} />
               </View>
               <Text style={styles.iconsTitle}>WordPress</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "laravel"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/laravel.png')} />
               </View>
@@ -70,19 +70,19 @@ const HomeScreen = () => {
             </Pressable>
           </View>
           <View style={styles.parentGrid}>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "kubernetes"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/kubernetes.png')} />
               </View>
               <Text style={styles.iconsTitle}>Kubernetes</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "javascript"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/javascript.png')} />
               </View>
               <Text style={styles.iconsTitle}>JavaScript</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Options')}  style={styles.childGrid}>
+            <Pressable onPress={() => navigation.navigate('Options', {theme: "devops"})}  style={styles.childGrid}>
               <View style={styles.iconsImageBackground}>
                 <Image style={styles.iconsImage} source={require('../asset/devops.png')} />
               </View>
