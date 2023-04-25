@@ -18,7 +18,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Options" component={OptionsScreen} />
-        <Stack.Screen options={{ headerShown: true }} name="Questions" component={QuestionsScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Questions" component={QuestionsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

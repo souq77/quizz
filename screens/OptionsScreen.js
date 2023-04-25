@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native'
-import React, { useState, , useEffect  } from 'react';
+import React, { useState , useEffect  } from 'react';
 import { TextInput } from 'react-native'
 import Slider from '@react-native-community/slider';
 import { useNavigation } from '@react-navigation/native';
