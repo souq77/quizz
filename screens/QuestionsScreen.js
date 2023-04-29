@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, ScrollView, Text, View, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SafeAreaView from "react-native-safe-area-view";
 import { useRoute } from "@react-navigation/native";
-
+import { useNavigation } from "@react-navigation/native";
+import ProgressBar from "./ProgressBar";
 const QuestionsScreen = () => {
+  const navigation = useNavigation();
+
   const route = useRoute();
   const [apiResponse, setApiResponse] = useState([]);
 
@@ -17,7 +20,7 @@ const QuestionsScreen = () => {
             {
               params: {
                 apiKey: "jLoUlj3Aeoh6MQ7kpKbvxxeWEC84l3jlviEYn95K",
-                limit: 1,
+                limit: 20,
               },
             }
           );
@@ -43,14 +46,15 @@ const QuestionsScreen = () => {
   const [difficulty, setDifficulty] = useState("");
   const [counter, setCounter] = useState(0);
   const [indexQuestion, setindexQuestion] = useState(0);
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
-    if (apiResponse.length !== 0) {
+    if (apiResponse.length !== indexQuestion) {
+      setProgress((indexQuestion*100/apiResponse.length)/100 )
       setQuestion(apiResponse[indexQuestion].question);
       setDescription(apiResponse[indexQuestion].description);
       setAnswers(apiResponse[indexQuestion].answers);
-      setMultipleCorrectAnswers(
-        apiResponse[indexQuestion].multipleCorrectAnswers
-      );
+      setMultipleCorrectAnswers(apiResponse[indexQuestion].multipleCorrectAnswers);
       setCorrectAnswers(apiResponse[indexQuestion].correctAnswers);
       setCorrectAnswer(apiResponse[indexQuestion].correctAnswer);
       setExplanation(apiResponse[indexQuestion].explanation);
@@ -58,36 +62,57 @@ const QuestionsScreen = () => {
       setTags(apiResponse[indexQuestion].tags);
       setCategory(apiResponse[indexQuestion].category);
       setDifficulty(apiResponse[indexQuestion].difficulty);
+    } else {
+      // navigation.navigate('Result')
     }
   }, [indexQuestion, apiResponse]);
 
   const [score, setScore] = useState(0);
   console.log(answers);
   return (
-    <View>
+    <ScrollView>
       <View style={styles.questionBox}>
         <Text style={styles.questionText}>
           N° {indexQuestion + 1} : {question}
         </Text>
       </View>
-      <View style={{ height : "15%",flex: 1, flexDirection: "row", alignItems: "center" }}>
-        <View style={{ flex: 1, padding : 30 }}>
-          <Text>Left Component</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginLeft: "10%",
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <Text>0 pts</Text>
         </View>
-        <View style={{ flex: 1 , padding : 30  }}>
-          <Text>Right Component</Text>
+        <View style={{ flex: 1 }}>
+          <Text>0:00</Text>
         </View>
       </View>
-      {Object.keys(answers).map((key) => (
-        <View key={key} style={styles.answersBox}>
-          <Text style={styles.answersText}>
-            {key.substring(7).toUpperCase()} : {answers[key]}
-          </Text>
-        </View>
-      ))}
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding : '5%' }}>
+        <ProgressBar progress={progress} />
+      </View>
+      <View style={{ height: "70%" }}>
+        {Object.keys(answers)
+          .filter((key) => answers[key] !== null)
+          .map((key) => (
+            <View key={key} style={styles.answersBox}>
+              <Text style={styles.answersText}>
+                {key.substring(7).toUpperCase()} : {answers[key]}
+              </Text>
+            </View>
+          ))}
+      </View>
       <View>
+        <Pressable
+          style={{ backgroundColor: "green" }}
+          onPress={() => console.log(setindexQuestion(indexQuestion + 1))}
+        >
+          <Text>ici</Text>
+        </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -117,7 +142,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     backgroundColor: "white",
     margin: 15,
-    height: "7%",
+    height: "10%",
   },
   answersText: {
     fontSize: 16,
