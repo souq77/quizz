@@ -1,12 +1,29 @@
 import { StyleSheet, ScrollView, Text, View, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import SafeAreaView from "react-native-safe-area-view";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import ProgressBar from "./ProgressBar";
+
 const QuestionsScreen = () => {
+
   const navigation = useNavigation();
+  const answerViews = useRef({});
+
+  const setViewRef = (key, ref) => {
+    answerViews.current[key] = ref;
+  };
+
+  const selectAnswer = (key) => {
+    if(setSelectedAnswers[key] === null ){ 
+      setSelectedAnswers[key] = true;
+    }
+    const style  = answerViews.current[key];
+    const backgroundColor = style.backgroundColor;
+    console.log(style);
+     
+  };
 
   const route = useRoute();
   const [apiResponse, setApiResponse] = useState([]);
@@ -33,10 +50,12 @@ const QuestionsScreen = () => {
     fct();
   }, []);
 
+
   const [question, setQuestion] = useState("");
   const [description, setDescription] = useState("");
   const [answers, setAnswers] = useState([]);
   const [multipleCorrectAnswers, setMultipleCorrectAnswers] = useState(false);
+  const [selectedAnswers, setSelectedAnswers] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState(null);
   const [explanation, setExplanation] = useState("");
@@ -50,11 +69,13 @@ const QuestionsScreen = () => {
 
   useEffect(() => {
     if (apiResponse.length !== indexQuestion) {
-      setProgress((indexQuestion*100/apiResponse.length)/100 )
+      setProgress((indexQuestion * 100) / apiResponse.length / 100);
       setQuestion(apiResponse[indexQuestion].question);
       setDescription(apiResponse[indexQuestion].description);
       setAnswers(apiResponse[indexQuestion].answers);
-      setMultipleCorrectAnswers(apiResponse[indexQuestion].multipleCorrectAnswers);
+      setMultipleCorrectAnswers(
+        apiResponse[indexQuestion].multipleCorrectAnswers
+      );
       setCorrectAnswers(apiResponse[indexQuestion].correctAnswers);
       setCorrectAnswer(apiResponse[indexQuestion].correctAnswer);
       setExplanation(apiResponse[indexQuestion].explanation);
@@ -68,14 +89,25 @@ const QuestionsScreen = () => {
   }, [indexQuestion, apiResponse]);
 
   const [score, setScore] = useState(0);
-  console.log(answers);
+  console.log(apiResponse[indexQuestion]);
+ /* answerViews.current["answer_b"].setNativeProps({
+    style: {
+      backgroundColor: "white"
+    }
+  });*/
+
+
   return (
-    <ScrollView>
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}> {category} - {difficulty}</Text>
+      </View>
       <View style={styles.questionBox}>
         <Text style={styles.questionText}>
           N° {indexQuestion + 1} : {question}
         </Text>
       </View>
+
       <View
         style={{
           flexDirection: "row",
@@ -90,35 +122,60 @@ const QuestionsScreen = () => {
           <Text>0:00</Text>
         </View>
       </View>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding : '5%' }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "5%",
+        }}
+      >
         <ProgressBar progress={progress} />
       </View>
-      <View style={{ height: "70%" }}>
+
+      <ScrollView style={{ height: 400}}>
+        {multipleCorrectAnswers ? <Text style={styles.answersInfo} >multiple correct answers</Text> : <Text style={styles.answersInfo}>Unique answer</Text>}
         {Object.keys(answers)
           .filter((key) => answers[key] !== null)
           .map((key) => (
-            <View key={key} style={styles.answersBox}>
+            <Pressable key={key} ref={ref => setViewRef(key, ref)} style={styles.answersBox} onPress={() => selectAnswer(key)}>
               <Text style={styles.answersText}>
                 {key.substring(7).toUpperCase()} : {answers[key]}
               </Text>
-            </View>
+            </Pressable>
           ))}
-      </View>
+      </ScrollView>
       <View>
+        <Text>
+        {tip}
+        </Text>
+      </View>
+      <View style={styles.buttonContainer}>
         <Pressable
-          style={{ backgroundColor: "green" }}
           onPress={() => console.log(setindexQuestion(indexQuestion + 1))}
+          style={styles.buttonNext}
         >
-          <Text>ici</Text>
+          <Text style={styles.buttonNextText}>Next</Text>
         </Pressable>
       </View>
-    </ScrollView>
+
+    </View>
   );
 };
 
 export default QuestionsScreen;
 
 const styles = StyleSheet.create({
+  header: {
+    marginTop: "15%",
+    height: 30,
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#0782F9",
+    textAlign : 'center'
+  },
   questionBox: {
     backgroundColor: "#0782F9",
     borderRadius: 10,
@@ -129,7 +186,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     margin: "5%",
-    marginTop: "20%",
+    height: 100,
+    justifyContent: 'center'
+
   },
   questionText: {
     fontSize: 16,
@@ -137,17 +196,35 @@ const styles = StyleSheet.create({
     color: "white",
   },
   answersBox: {
-    borderRadius: "15px",
+    borderRadius: "6px",
     borderColor: "#0782F9",
-    borderWidth: 3,
+    borderWidth: 2,
     backgroundColor: "white",
     margin: 15,
-    height: "10%",
+    flex : 1
   },
   answersText: {
-    fontSize: 16,
     textAlign: "center",
     marginTop: "auto",
     marginBottom: "auto",
+  },
+  buttonNext: {
+    backgroundColor: '#0782F9',
+    padding: 15,
+    borderRadius: 10,
+    margin: 15,
+
+  },
+  buttonNextText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign : 'center'
+  },
+  answersInfo :  {
+    color: 'gray',
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign : 'center'
   },
 });
