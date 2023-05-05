@@ -16,7 +16,7 @@ import ProgressBar from "./ProgressBar";
 const QuestionsScreen = () => {
   const navigation = useNavigation();
   const answerViews = useRef({});
-
+  const [responseQuestions, setResponseQuestions] = useState([]);
   const setViewRef = (key, ref) => {
     answerViews.current[key] = ref;
   };
@@ -41,6 +41,9 @@ const QuestionsScreen = () => {
             },
           });
         } catch (error) {}
+        /*  answerViews.current?.children.forEach(child => {
+          child.setNativeProps({style: {color: 'red'}});
+        });*/
       });
   };
 
@@ -57,15 +60,29 @@ const QuestionsScreen = () => {
             correctAnswers[item]
         ) {
           allCorrect = false;
+          console.log("ok");
+          if (checkNext === "Next")
+            setResponseQuestions([
+              ...responseQuestions,
+              apiResponse[indexQuestion].question,
+            ]);
         }
         answerViews.current[item.replace("_correct", "")].setNativeProps({
           style: {
             backgroundColor: color,
+            color: "white",
           },
         });
       } catch (error) {}
+
+      if (apiResponse.length - 1 === indexQuestion) {
+        navigation.navigate("Result", {
+          score: score,
+          totalQuestions: apiResponse.length * 5,
+          responseQuestions: responseQuestions,
+        });
+      }
     });
-    console.log(allCorrect);
 
     if (allCorrect) {
       setScore(score + 5);
@@ -117,7 +134,7 @@ const QuestionsScreen = () => {
   const [progress, setProgress] = useState(0);
   const [checkNext, setCheckNext] = useState("Check");
   useEffect(() => {
-    if (apiResponse.length !== indexQuestion) {
+    if (apiResponse.length > indexQuestion) {
       setProgress((indexQuestion * 100) / apiResponse.length / 100);
       setQuestion(apiResponse[indexQuestion].question);
       setDescription(apiResponse[indexQuestion].description);
@@ -143,8 +160,6 @@ const QuestionsScreen = () => {
       selectAnswer(null);
       setCheckNext("Check");
       setTimeLeft(route.params.time);
-    } else {
-      // navigation.navigate('Result')
     }
   }, [indexQuestion, apiResponse]);
   useEffect(() => {
@@ -162,7 +177,6 @@ const QuestionsScreen = () => {
     }
   }, [timeLeft]);
   const [score, setScore] = useState(0);
-  console.log(apiResponse[indexQuestion]);
   return (
     <View>
       <View style={styles.header}>
@@ -190,7 +204,7 @@ const QuestionsScreen = () => {
           </Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text>Time Left: {timeLeft}</Text>
+          <Text>Time Left: {route.params.istimeLimit ? timeLeft : "-"}</Text>
         </View>
       </View>
       <View
@@ -219,7 +233,12 @@ const QuestionsScreen = () => {
               style={styles.answersBox}
               onPress={() => selectAnswer(key)}
             >
-              <Text style={styles.answersText}>
+              <Text
+                style={[
+                  styles.answersText,
+                  { color: checkNext === "Check" ? "black" : "white" },
+                ]}
+              >
                 {key.substring(7).toUpperCase()} : {answers[key]}
               </Text>
             </Pressable>

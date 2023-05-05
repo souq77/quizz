@@ -1,9 +1,17 @@
-import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-
-const ResultsPage = ({ score, totalQuestions, incorrectQuestions, handleRetryQuiz }) => {
+import React, { useState } from 'react';
+import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+const ResultScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  
+  const [score, setScore] = useState(route.params.score);
+  const [totalQuestions, setTotalQuestions] = useState(route.params.totalQuestions);
+  const [responseQuestions, setResponseQuestions] = useState(route.params.responseQuestions);
+  const [showQuizResults, setShowQuizResults] = useState(true);
   const percentage = Math.round((score / totalQuestions) * 100);
-
+  console.log(route.params.responseQuestions);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Résultats</Text>
@@ -18,15 +26,15 @@ const ResultsPage = ({ score, totalQuestions, incorrectQuestions, handleRetryQui
           <Text style={styles.message}>Vous pouvez faire mieux, continuez à vous entraîner.</Text>
         )}
       </View>
-      {incorrectQuestions.length > 0 && (
-        <View style={styles.incorrectQuestionsContainer}>
-          <Text style={styles.incorrectQuestionsTitle}>Questions incorrectes</Text>
-          {incorrectQuestions.map((question, index) => (
+      {responseQuestions.length > 0 && (
+        <View style={styles.responseQuestionsContainer}>
+          <Text style={styles.responseQuestionsTitle}>Questions incorrectes</Text>
+          {responseQuestions.map((question, index) => (
             <Text style={styles.incorrectQuestion} key={index}>{question}</Text>
           ))}
         </View>
       )}
-      <Button title="Recommencer le quizz" onPress={handleRetryQuiz} />
+      <Button title="Recommencer le quizz" /*onPress={handleRetryQuiz}*/ />
     </View>
   );
 };
@@ -64,10 +72,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  incorrectQuestionsContainer: {
+  responseQuestionsContainer: {
     marginTop: 20,
   },
-  incorrectQuestionsTitle: {
+  responseQuestionsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -78,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResultsPage;
+export default ResultScreen;
