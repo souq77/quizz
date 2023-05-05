@@ -45,9 +45,7 @@ const QuestionsScreen = () => {
   };
 
   const checkAnswer = () => {
-    if (checkNext === "Next") {
-      setindexQuestion(indexQuestion + 1);
-    }
+    if (checkNext === "Next") setindexQuestion(indexQuestion + 1);
     setCheckNext("Next");
     let allCorrect = true;
     Object.keys(correctAnswers).map((item) => {
@@ -75,6 +73,7 @@ const QuestionsScreen = () => {
   };
   const route = useRoute();
   const [apiResponse, setApiResponse] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(route.params.time);
 
   useEffect(() => {
     const fct = async () => {
@@ -85,7 +84,10 @@ const QuestionsScreen = () => {
             {
               params: {
                 apiKey: "jLoUlj3Aeoh6MQ7kpKbvxxeWEC84l3jlviEYn95K",
-                limit: 20,
+                category: route.params.theme,
+                difficulty: route.params.niveau,
+                tags: route.params.tags,
+                limit: route.params.limit,
               },
             }
           );
@@ -97,10 +99,8 @@ const QuestionsScreen = () => {
     };
     fct();
   }, []);
-  const toggleSwitch = () => setIsOn(previousState => !previousState);
 
   const [question, setQuestion] = useState("");
-  const [isOn, setIsOn] = useState(false);
   const [description, setDescription] = useState("");
   const [answers, setAnswers] = useState([]);
   const [multipleCorrectAnswers, setMultipleCorrectAnswers] = useState(false);
@@ -142,13 +142,27 @@ const QuestionsScreen = () => {
       });
       selectAnswer(null);
       setCheckNext("Check");
+      setTimeLeft(route.params.time);
     } else {
       // navigation.navigate('Result')
     }
   }, [indexQuestion, apiResponse]);
+  useEffect(() => {
+    if (route.params.istimeLimit) {
+      const intervalId = setInterval(() => {
+        if (timeLeft > 0) {
+          setTimeLeft(timeLeft - 1);
+        } else {
+          setCheckNext("Check");
+          checkAnswer();
+        }
+      }, 1000);
 
+      return () => clearInterval(intervalId);
+    }
+  }, [timeLeft]);
   const [score, setScore] = useState(0);
-  console.log(correctAnswers);
+  console.log(apiResponse[indexQuestion]);
   return (
     <View>
       <View style={styles.header}>
@@ -171,16 +185,12 @@ const QuestionsScreen = () => {
         }}
       >
         <View style={{ flex: 1 }}>
-          <Text>{score} pts</Text>
+          <Text>
+            {score} pts / {apiResponse.length * 5}
+          </Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Text>0:00</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isOn ? "#f5dd4b" : "#f4f3f4"}
-            onValueChange={toggleSwitch}
-            value={isOn}
-          />
+          <Text>Time Left: {timeLeft}</Text>
         </View>
       </View>
       <View
@@ -267,6 +277,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   answersText: {
+    padding: 3,
+    fontSize: 20,
     textAlign: "center",
     marginTop: "auto",
     marginBottom: "auto",
@@ -285,6 +297,7 @@ const styles = StyleSheet.create({
   },
   answersInfo: {
     color: "gray",
+    padding: 25,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
