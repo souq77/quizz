@@ -77,8 +77,8 @@ const QuestionsScreen = () => {
 
       if (apiResponse.length - 1 === indexQuestion) {
         navigation.navigate("Result", {
-          score: score,
-          totalQuestions: apiResponse.length * 5,
+          score: score/5,
+          totalQuestions: apiResponse.length,
           responseQuestions: responseQuestions,
         });
       }
@@ -95,18 +95,24 @@ const QuestionsScreen = () => {
   useEffect(() => {
     const fct = async () => {
       if (apiResponse.length === 0) {
+        const params = {};
+        params.apiKey =  "jLoUlj3Aeoh6MQ7kpKbvxxeWEC84l3jlviEYn95K";
+        if (route.params.theme) {
+          params.category = route.params.theme;
+        }
+        if (route.params.niveau) {
+          params.category = route.params.niveau;
+        }
+        if (route.params.tags) {
+          params.tags = route.params.tags;
+        }
+        if (route.params.limit) {
+          params.limit = route.params.limit;
+        }
+        console.log(params);
         try {
           const response = await axios.get(
-            "https://quizapi.io/api/v1/questions",
-            {
-              params: {
-                apiKey: "jLoUlj3Aeoh6MQ7kpKbvxxeWEC84l3jlviEYn95K",
-                category: route.params.theme,
-                difficulty: route.params.niveau,
-                tags: route.params.tags,
-                limit: route.params.limit,
-              },
-            }
+            "https://quizapi.io/api/v1/questions", { params }
           );
           setApiResponse(response.data);
         } catch (error) {

@@ -30,11 +30,11 @@ const ResultScreen = () => {
         <View style={styles.responseQuestionsContainer}>
           <Text style={styles.responseQuestionsTitle}>Questions incorrectes</Text>
           {responseQuestions.map((question, index) => (
-            <Text style={styles.incorrectQuestion} key={index}>{question}</Text>
+            <Text style={styles.incorrectQuestion} key={index}>{index} - {question}</Text>
           ))}
         </View>
       )}
-      <Button title="Recommencer le quizz" /*onPress={handleRetryQuiz}*/ />
+      <Button title="Retourner à l'accueil" onPress={() => navigation.navigate("Home")}/>
     </View>
   );
 };
