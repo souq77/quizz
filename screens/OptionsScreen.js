@@ -97,7 +97,7 @@ const OptionsScreen = () => {
             value={isOn}
           />
         </View>
-        <View pointerEvents={ isOn ?  '1' : 'none'} style={{ opacity:  isOn ?  '1' : '0' }}>
+        <View pointerEvents={ isOn ?  '1' : 'none'} style={{ opacity:  isOn ?  '1' : '0.3' }}>
           <Text style={styles.rowSubTitleText}>Time per question : {time}</Text>
           <Slider
             style={styles.slider}

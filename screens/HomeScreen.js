@@ -1,47 +1,115 @@
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import data from "../asset/data.json";
 import Swiper from "react-native-swiper/src";
 import { LineChart } from "react-native-chart-kit";
+import { auth, db } from "../firebase"; // Assurez-vous d'avoir correctement importé 'db' depuis '../firebase'
+
+import { collection, getDocs } from "firebase/firestore"; // Importez les fonctions nécessaires de Firestore
 
 let itemList = [];
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [scores, setScores] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch scores from Firebase and update the state
+    const fetchScores = async () => {
+      try {
+        // Assuming you have the user's email stored somewhere
+        const userEmail = encodeURIComponent(auth.currentUser.email);
+
+        // Make a Firebase query to fetch the scores based on user's email
+        const scoresRef = collection(db, "scores");
+        const scoresSnapshot = await getDocs(scoresRef);
+        const userScoresDoc = scoresSnapshot.docs.find(
+          (doc) => doc.id === userEmail
+        );
+
+        if (userScoresDoc) {
+          const scoresData = userScoresDoc.data().scores;
+          setScores(scoresData);
+          setLoading(false);
+        } else {
+          console.log("No scores found for the user:", userEmail);
+        }
+      } catch (error) {
+        console.log("Error fetching scores:", error);
+      }
+    };
+
+    fetchScores();
+  }, []); // Empty dependency array to fetch the scores only once on component mount
 
   console.log(data.languages.length);
+  console.log(scores);
   return (
     <>
       <View style={styles.header}>
-        <LineChart
-          data={{
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            datasets: [
-              {
-                data: [20, 45, 28, 80, 99, 43],
+        <View style={styles.headerButtons}>
+          <Pressable
+            onPress={() => navigation.navigate("Logout")}
+            style={styles.headerButton}
+          >
+            <Image
+              source={require("../asset/logout.png")}
+              style={styles.headerButtonIcon}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() => navigation.navigate("Setting")}
+            style={styles.headerButton}
+          >
+            <Image
+              source={require("../asset/settings.png")}
+              style={styles.headerButtonIcon}
+            />
+          </Pressable>
+        </View>
+
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0782F9" />
+          </View>
+        ) : (
+          <LineChart
+            data={{
+              datasets: [
+                {
+                  data: scores.map((element) => Number(element) || 0),
+                },
+              ],
+            }}
+            width={300}
+            height={200}
+            chartConfig={{
+              backgroundColor: "#f2f2f2",
+              backgroundGradientFrom: "#f2f2f2",
+              backgroundGradientTo: "#f2f2f2",
+              color: (opacity = 1) => `rgba(7, 130, 249, ${opacity})`,
+              style: {
+                borderRadius: 16,
               },
-            ],
-          }}
-          width={300}
-          height={200}
-          chartConfig={{
-            backgroundColor: "#f2f2f2",
-            backgroundGradientFrom: "#f2f2f2",
-            backgroundGradientTo: "#f2f2f2",
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(7, 130, 249, ${opacity})`, // Couleur principale du graphique
-            style: {
-              borderRadius: 16,
-            },
-            propsForDots: {
-              r: "6", // Taille des points du graphique
-              strokeWidth: "2",
-              stroke: "white", // Couleur des points du graphique
-            },
-          }}
-          bezier
-        />
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "white",
+              },
+              formatYLabel: (value) => value.toFixed(2),
+            }}
+            bezier
+          />
+        )}
       </View>
       <View style={styles.container}>
         <Swiper>
@@ -231,6 +299,17 @@ const styles = StyleSheet.create({
     padding: "3%",
     marginTop: "20%",
     borderRadius: "15px",
+  },
+  headerButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Utilisez "space-between" pour espacer les boutons
+  },
+  headerButton: {
+    marginLeft: 10,
+  },
+  headerButtonIcon: {
+    width: 20,
+    height: 20,
   },
   headerFirstText: {
     color: "white",

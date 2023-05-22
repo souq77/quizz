@@ -5,7 +5,7 @@ const ProgressBar = ({ progress }) => {
   return (
     <View style={styles.container}>
       <View style={[styles.progressBar, { width: `${progress * 100}%` }]}>
-        <Text style={{paddœwingLeft : '10%', color:'white', fontWeight : 'bold'}}>{progress * 100}%</Text>
+        <Text style={{paddingLeft : '10%', color:'white', fontWeight : 'bold'}}>{progress * 100}%</Text>
       </View>
     </View>
   );
