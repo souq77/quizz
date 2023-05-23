@@ -60,7 +60,6 @@ const QuestionsScreen = () => {
             correctAnswers[item]
         ) {
           allCorrect = false;
-          console.log("ok");
           if (checkNext === "Next")
             setResponseQuestions([
               ...responseQuestions,

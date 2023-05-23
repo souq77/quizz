@@ -6,11 +6,12 @@ import {
   Pressable,
   Switch,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TextInput } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import { LanguageContext } from "../LanguageContext";
 
 const OptionsScreen = () => {
   const route = useRoute();
@@ -25,9 +26,53 @@ const OptionsScreen = () => {
   const [time, setTime] = useState(5);
 
   const [selectedLvl, setSelectedLvl] = useState(null);
+
+
+  const [lvlText, setLvlText] = useState("");
+  const [easyText, setEasyText] = useState("");
+  const [mediumText, setMediumText] = useState("");
+  const [hardText, setHardText] = useState("");
+  const [tagsText, setTagsText] = useState("");
+  const [TimeLimitText, setTimeLimitText] = useState("");
+  const [TimeQText, setTimeQText] = useState("");
+  const [nbQ, setNbQText] = useState("");
+
+
+  const handleTranslate = () => {
+    translateText("Number of questions").then((result) => {
+      setNbQText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("Seconds per question").then((result) => {
+      setTimeQText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("Activate Time Limit").then((result) => {
+      setTimeLimitText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("tags").then((result) => {
+      setTagsText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("hard").then((result) => {
+      setHardText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("medium").then((result) => {
+      setMediumText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("level").then((result) => {
+      setLvlText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("easy").then((result) => {
+      setEasyText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+  };
   const handleLvlPress = (lvl) => {
     setSelectedLvl(lvl);
   };
+  const { translateText } = useContext(LanguageContext);
+
+  useEffect(() => {
+  
+    handleTranslate();
+  }, []); // Empty dependency array to fetch the scores only once on component mount
   const navigation = useNavigation();
 
   return (
@@ -38,7 +83,7 @@ const OptionsScreen = () => {
         </Text>
       </View>
       <View style={styles.rowTitle}>
-        <Text style={styles.rowTitleText}>Niveau : </Text>
+        <Text style={styles.rowTitleText}>{lvlText}</Text>
         <View style={styles.niveaux}>
           <TouchableOpacity
             onPress={() => handleLvlPress("Easy")}
@@ -49,7 +94,7 @@ const OptionsScreen = () => {
               marginRight: "15%",
             }}
           >
-            <Text style={styles.niveauTitle}>Easy</Text>
+            <Text style={styles.niveauTitle}>{easyText}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleLvlPress("Medium")}
@@ -60,7 +105,7 @@ const OptionsScreen = () => {
               marginRight: "15%",
             }}
           >
-            <Text style={styles.niveauTitle}>Medium</Text>
+            <Text style={styles.niveauTitle}>{mediumText}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -72,12 +117,12 @@ const OptionsScreen = () => {
               marginRight: "15%",
             }}
           >
-            <Text style={styles.niveauTitle}>Hard</Text>
+            <Text style={styles.niveauTitle}>{hardText}</Text>
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.rowTitle}>
-        <Text style={styles.rowTitleText}>Tags : </Text>
+        <Text style={styles.rowTitleText}>{tagsText}</Text>
         <View style={styles.Tags}>
           <TextInput
             placeholder="Linux, Bash, chmod ..."
@@ -89,7 +134,7 @@ const OptionsScreen = () => {
       </View>
       <View style={styles.rowTitle}>
         <View style={styles.containerTimeSet}>
-          <Text style={styles.rowTitleText}>Activate Time Limit</Text>
+          <Text style={styles.rowTitleText}>{TimeLimitText}</Text>
 
           <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -98,7 +143,7 @@ const OptionsScreen = () => {
           />
         </View>
         <View pointerEvents={ isOn ?  '1' : 'none'} style={{ opacity:  isOn ?  '1' : '0.3' }}>
-          <Text style={styles.rowSubTitleText}>Time per question : {time}</Text>
+          <Text style={styles.rowSubTitleText}>{TimeQText} : {time}</Text>
           <Slider
             style={styles.slider}
             minimumValue={5}
@@ -110,7 +155,7 @@ const OptionsScreen = () => {
         </View>
       </View>
       <View style={styles.rowTitle}>
-        <Text style={styles.rowTitleText}>Nombre de questions : {limit}</Text>
+        <Text style={styles.rowTitleText}>{nbQ} : {limit}</Text>
         <Slider
           style={styles.slider}
           minimumValue={5}

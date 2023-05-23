@@ -6,22 +6,31 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import data from "../asset/data.json";
 import Swiper from "react-native-swiper/src";
 import { LineChart } from "react-native-chart-kit";
 import { auth, db } from "../firebase"; // Assurez-vous d'avoir correctement importé 'db' depuis '../firebase'
-
 import { collection, getDocs } from "firebase/firestore"; // Importez les fonctions nécessaires de Firestore
-
+import { LanguageContext } from "../LanguageContext";
 let itemList = [];
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [randomText, setRandomText] = useState("");
+  const [retryText, setRetryText] = useState("");
+  const handleTranslate = () => {
+    translateText("random").then((result) => {
+      setRandomText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+    translateText("retry").then((result) => {
+      setRetryText(result.charAt(0).toUpperCase() + result.slice(1));
+    });
+  };
   const [scores, setScores] = useState([]);
+  const { translateText } = useContext(LanguageContext);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     // Fetch scores from Firebase and update the state
     const fetchScores = async () => {
@@ -47,12 +56,10 @@ const HomeScreen = () => {
         console.log("Error fetching scores:", error);
       }
     };
-
     fetchScores();
+    handleTranslate();
   }, []); // Empty dependency array to fetch the scores only once on component mount
 
-  console.log(data.languages.length);
-  console.log(scores);
   return (
     <>
       <View style={styles.header}>
@@ -274,7 +281,7 @@ const HomeScreen = () => {
             source={require("../asset/random.png")}
             style={styles.imageFooter}
           />
-          <Text style={styles.textFooter}>Random</Text>
+          <Text style={styles.textFooter}>{randomText}</Text>
         </Pressable>
         <Pressable
           onPress={() => navigation.navigate("Questions", { time: 10 })}
@@ -284,7 +291,7 @@ const HomeScreen = () => {
             source={require("../asset/error.png")}
             style={styles.imageFooter}
           />
-          <Text style={styles.textFooter}>Retry</Text>
+          <Text style={styles.textFooter}>{retryText}</Text>
         </Pressable>
       </View>
     </>

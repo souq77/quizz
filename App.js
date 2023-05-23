@@ -8,12 +8,14 @@ import HomeScreen from './screens/HomeScreen';
 import OptionsScreen from './screens/OptionsScreen';
 import QuestionsScreen from './screens/QuestionsScreen';
 import ResultScreen from './screens/ResultScreen';
-import SettingScreen from './screens/SettingScreen';
+import {  LanguageProvider } from './LanguageContext';
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
   return (
+    <LanguageProvider>
+
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
@@ -22,11 +24,10 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="Options" component={OptionsScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Questions" component={QuestionsScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Result" component={ResultScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Setting" component={SettingScreen} />
-
 
       </Stack.Navigator>
     </NavigationContainer>
+    </LanguageProvider>
   );
 }
 

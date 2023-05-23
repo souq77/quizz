@@ -1,17 +1,17 @@
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TextInput, TouchableOpacity, Image } from 'react-native';
 import { auth } from '../firebase';
-
+import {  LanguageContext } from '../LanguageContext';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { language, setLanguage } = useContext(LanguageContext);
 
   const navigation = useNavigation()
   useEffect(() => {
-    console.log('ok');
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         navigation.navigate("Home")

@@ -12,7 +12,7 @@ const RegisterScreen = () => {
 
   const navigation = useNavigation()
   useEffect(() => {
-    console.log('ok');
+
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         navigation.navigate("Home")
